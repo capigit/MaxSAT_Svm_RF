@@ -8,7 +8,6 @@ def evaluer_svm_classique(X_train, X_test, y_train, y_test):
     return accuracy_score(y_test, y_pred)
 
 def evaluer_svm_lad(X_train, X_test, y_train, y_test, mss_indices):
-    # Découpage des données selon le MSS
     X_train_mss = X_train[:, mss_indices]
     X_test_mss = X_test[:, mss_indices]
     
