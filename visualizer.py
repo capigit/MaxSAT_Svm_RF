@@ -31,6 +31,6 @@ def afficher_graphique_resultats(acc_svm, acc_lad_svm, feat_svm, feat_lad_svm,
     
     plt.tight_layout()
     
-    nom_fichier = 'resultats_comparaison_LAD.png'
+    nom_fichier = 'resultats.png'
     plt.savefig(nom_fichier, dpi=300, bbox_inches='tight')
     print(f"\n[Succès] Le graphique a été sauvegardé sous le nom : '{nom_fichier}'")

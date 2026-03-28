@@ -8,11 +8,8 @@ import visualizer
 def run_project():
     print("      DÉMARRAGE DU PROJET LAD-ML          \n")
     
-    # X, y = dataset_manager.get_figure1_toy_data()
     X, y = dataset_manager.get_sklearn_breast_cancer_binarized()
-    # X, y = dataset_manager.get_synthetic_data()
     
-    # 2. Séparation Train/Test
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
     nb_features_total = X_train.shape[1]
     
@@ -21,16 +18,13 @@ def run_project():
     
     print("--- 1. ÉVALUATION DES SVM ---")
     
-    # SVM Classique
     acc_svm_class = svm_comparator.evaluer_svm_classique(X_train, X_test, y_train, y_test)
     print(f"  -> [SVM Classique] Accuracy : {acc_svm_class * 100:.2f}% (utilise {nb_features_total} variables)")
     
-    # Recherche d'un MSS pour le SVM
     print("  -> Recherche d'un MSS avec MaxSAT en cours...")
     mss_unique = lad_solver.calculer_un_mss(X_train, y_train)
     nb_features_lad_svm = len(mss_unique)
     
-    # LAD-SVM
     if mss_unique:
         acc_svm_lad = svm_comparator.evaluer_svm_lad(X_train, X_test, y_train, y_test, mss_unique)
         print(f"  -> [LAD-SVM] Accuracy : {acc_svm_lad * 100:.2f}% (utilise {nb_features_lad_svm} variables : {mss_unique})\n")
@@ -39,21 +33,17 @@ def run_project():
         acc_svm_lad, nb_features_lad_svm = 0, 0
 
     print("--- 2. ÉVALUATION DES FORÊTS ALÉATOIRES ---")
-    K = 10 # Nombre d'arbres dans les forêts
-    N_S = 15 # Nombre de MSS différents à générer
+    K = 10
+    N_S = 15
     
-    # RF Classique
     acc_rf_class = rf_comparator.evaluer_rf_classique(X_train, X_test, y_train, y_test, K)
     print(f"  -> [RF Classique] Accuracy : {acc_rf_class * 100:.2f}% (K={K} arbres)")
     
-    # Génération de plusieurs MSS
     print(f"  -> Génération de {N_S} MSS différents avec MaxSAT (clauses bloquantes)...")
     liste_mss = lad_solver.generer_plusieurs_mss(X_train, y_train, nb_mss=N_S)
     
-    # RF-LAD
     if liste_mss:
         acc_rf_lad = rf_comparator.evaluer_rf_lad(X_train, X_test, y_train, y_test, liste_mss, K)
-        # En moyenne, combien de variables un arbre utilise-t-il dans la RF-LAD ?
         taille_moyenne_mss = round(sum(len(mss) for mss in liste_mss) / len(liste_mss), 1)
         print(f"  -> [RF-LAD] Accuracy : {acc_rf_lad * 100:.2f}% (Vote majoritaire sur {K} arbres)")
         print(f"     (Taille moyenne d'un MSS utilisé par les arbres : {taille_moyenne_mss} variables)\n")
