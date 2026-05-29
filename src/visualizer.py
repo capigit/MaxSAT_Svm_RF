@@ -39,15 +39,34 @@ def _html():
 <body>
   <main class="page-shell">
     <header class="report-header">
-      <div>
+      <div class="header-copy">
         <p class="eyebrow">Projet LAD-ML</p>
         <h1>Sélection de variables par MaxSAT</h1>
+        <p class="lead">Analyse expérimentale de la réduction de variables par logique MaxSAT, appliquée à des classificateurs SVM et forêts aléatoires.</p>
       </div>
       <div class="header-meta">
         <span id="dataset-name">Dataset</span>
         <strong id="generated-at">Rapport</strong>
       </div>
     </header>
+
+    <section class="method-strip" aria-label="Méthode">
+      <article>
+        <span>1</span>
+        <strong>Binarisation</strong>
+        <p>Le jeu Breast Cancer est transformé en variables binaires par seuillage.</p>
+      </article>
+      <article>
+        <span>2</span>
+        <strong>MaxSAT</strong>
+        <p>Les MSS minimisent les variables tout en séparant les classes.</p>
+      </article>
+      <article>
+        <span>3</span>
+        <strong>Évaluation</strong>
+        <p>Les modèles classiques sont comparés aux variantes LAD.</p>
+      </article>
+    </section>
 
     <section class="summary-grid" aria-label="Synthèse">
       <article class="metric-card">
@@ -65,6 +84,24 @@ def _html():
       <article class="metric-card">
         <span>Réduction LAD</span>
         <strong id="reduction-rate">0%</strong>
+      </article>
+    </section>
+
+    <section class="insight-grid" aria-label="Conclusions principales">
+      <article class="insight-card primary">
+        <span>Observation principale</span>
+        <strong id="main-insight">Analyse en cours</strong>
+        <p id="main-insight-detail"></p>
+      </article>
+      <article class="insight-card">
+        <span>Gain de compacité</span>
+        <strong id="compactness-gain">0 variable</strong>
+        <p>Variables retirées par le MSS LAD-SVM par rapport au modèle complet.</p>
+      </article>
+      <article class="insight-card">
+        <span>Écart RF-LAD</span>
+        <strong id="rf-gap">0 point</strong>
+        <p>Différence d'accuracy entre forêt aléatoire classique et RF-LAD.</p>
       </article>
     </section>
 
@@ -86,7 +123,7 @@ def _html():
       </section>
     </section>
 
-    <section class="panel">
+    <section class="panel results-panel">
       <div class="panel-heading">
         <h2>Tableau des résultats</h2>
         <span>Mesures obtenues sur le jeu de test</span>
@@ -123,6 +160,14 @@ def _html():
         <div class="mss-list" id="rf-mss-list"></div>
       </section>
     </section>
+
+    <section class="panel conclusion-panel">
+      <div class="panel-heading">
+        <h2>Conclusion expérimentale</h2>
+        <span>Synthèse automatique</span>
+      </div>
+      <p id="conclusion-text"></p>
+    </section>
   </main>
 
   <script src="assets/data.js"></script>
@@ -148,15 +193,18 @@ def _favicon():
 def _css():
     return """:root {
   color-scheme: light;
-  --bg: #f6f7f9;
+  --bg: #f4f6f8;
   --surface: #ffffff;
   --text: #19202a;
   --muted: #697386;
   --line: #d9dee7;
-  --blue: #315f9f;
-  --green: #3f8f63;
+  --blue: #275a92;
+  --blue-soft: #e8f0f8;
+  --green: #2f855a;
+  --green-soft: #e8f5ed;
   --amber: #b7791f;
   --ink: #243447;
+  --shadow: 0 16px 42px rgba(31, 43, 58, 0.08);
 }
 
 * {
@@ -171,18 +219,22 @@ body {
 }
 
 .page-shell {
-  width: min(1180px, calc(100% - 32px));
+  width: min(1200px, calc(100% - 32px));
   margin: 0 auto;
-  padding: 28px 0 40px;
+  padding: 28px 0 44px;
 }
 
 .report-header {
   display: flex;
-  align-items: flex-end;
+  align-items: flex-start;
   justify-content: space-between;
   gap: 24px;
-  padding: 18px 0 24px;
+  padding: 24px 0 26px;
   border-bottom: 1px solid var(--line);
+}
+
+.header-copy {
+  max-width: 760px;
 }
 
 .eyebrow {
@@ -201,7 +253,7 @@ p {
 }
 
 h1 {
-  font-size: 34px;
+  font-size: 38px;
   line-height: 1.12;
 }
 
@@ -209,11 +261,25 @@ h2 {
   font-size: 18px;
 }
 
+.lead {
+  max-width: 700px;
+  margin-top: 12px;
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1.55;
+}
+
 .header-meta {
   display: grid;
   gap: 5px;
+  min-width: 220px;
+  padding: 12px 14px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
   color: var(--muted);
   text-align: right;
+  box-shadow: var(--shadow);
 }
 
 .header-meta strong {
@@ -221,23 +287,72 @@ h2 {
   font-size: 14px;
 }
 
+.method-strip,
 .summary-grid,
+.insight-grid,
 .content-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 14px;
   margin-top: 18px;
+}
+
+.method-strip {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.summary-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.insight-grid {
+  grid-template-columns: 1.5fr 1fr 1fr;
 }
 
 .content-grid {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
+.method-strip article,
+.insight-card,
 .metric-card,
 .panel {
   background: var(--surface);
   border: 1px solid var(--line);
   border-radius: 8px;
+  box-shadow: var(--shadow);
+}
+
+.method-strip article {
+  display: grid;
+  grid-template-columns: 38px 1fr;
+  gap: 5px 12px;
+  align-items: center;
+  min-height: 106px;
+  padding: 16px;
+}
+
+.method-strip span {
+  grid-row: span 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  color: var(--blue);
+  background: var(--blue-soft);
+  border-radius: 999px;
+  font-weight: 700;
+}
+
+.method-strip strong {
+  color: var(--ink);
+  font-size: 14px;
+}
+
+.method-strip p {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.45;
 }
 
 .metric-card {
@@ -248,6 +363,7 @@ h2 {
 }
 
 .metric-card span,
+.insight-card span,
 .panel-heading span {
   color: var(--muted);
   font-size: 13px;
@@ -256,6 +372,32 @@ h2 {
 .metric-card strong {
   font-size: 28px;
   line-height: 1;
+}
+
+.insight-card {
+  display: grid;
+  align-content: start;
+  gap: 9px;
+  min-height: 140px;
+  padding: 18px;
+}
+
+.insight-card.primary {
+  background: #f9fbfd;
+  border-color: #cfdbea;
+}
+
+.insight-card strong {
+  color: var(--ink);
+  font-size: 21px;
+  line-height: 1.25;
+}
+
+.insight-card p,
+.conclusion-panel p {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.65;
 }
 
 .panel {
@@ -277,15 +419,15 @@ h2 {
 
 .chart {
   display: grid;
-  gap: 12px;
+  gap: 14px;
 }
 
 .bar-row {
   display: grid;
-  grid-template-columns: 132px 1fr 72px;
+  grid-template-columns: 134px 1fr 78px;
   align-items: center;
   gap: 12px;
-  min-height: 34px;
+  min-height: 38px;
 }
 
 .bar-label {
@@ -295,7 +437,7 @@ h2 {
 }
 
 .bar-track {
-  height: 16px;
+  height: 18px;
   overflow: hidden;
   background: #e8edf3;
   border-radius: 999px;
@@ -306,6 +448,7 @@ h2 {
   height: 100%;
   background: var(--blue);
   border-radius: inherit;
+  transition: width 240ms ease;
 }
 
 .bar-fill.lad {
@@ -321,6 +464,8 @@ h2 {
 
 .table-wrap {
   overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: 8px;
 }
 
 table {
@@ -331,7 +476,7 @@ table {
 
 th,
 td {
-  padding: 12px 10px;
+  padding: 13px 14px;
   border-bottom: 1px solid var(--line);
   text-align: left;
   white-space: nowrap;
@@ -345,6 +490,14 @@ th {
 
 td {
   font-size: 14px;
+}
+
+tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+tbody tr:nth-child(even) {
+  background: #fbfcfd;
 }
 
 .chips {
@@ -361,7 +514,7 @@ td {
   min-height: 30px;
   padding: 6px 10px;
   color: var(--ink);
-  background: #edf4ef;
+  background: var(--green-soft);
   border: 1px solid #c9dfd0;
   border-radius: 999px;
   font-size: 13px;
@@ -371,7 +524,7 @@ td {
 .mss-list {
   display: grid;
   gap: 10px;
-  max-height: 320px;
+  max-height: 360px;
   overflow: auto;
   padding-right: 4px;
 }
@@ -379,7 +532,7 @@ td {
 .mss-item {
   display: grid;
   gap: 6px;
-  padding: 10px;
+  padding: 11px;
   border: 1px solid var(--line);
   border-radius: 8px;
   background: #fbfcfd;
@@ -407,9 +560,15 @@ td {
     text-align: left;
   }
 
+  .method-strip,
   .summary-grid,
+  .insight-grid,
   .content-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .insight-card.primary {
+    grid-column: 1 / -1;
   }
 }
 
@@ -423,9 +582,15 @@ td {
     font-size: 28px;
   }
 
+  .method-strip,
   .summary-grid,
+  .insight-grid,
   .content-grid {
     grid-template-columns: 1fr;
+  }
+
+  .method-strip article {
+    min-height: auto;
   }
 
   .bar-row {
@@ -445,9 +610,18 @@ def _js():
 
 const formatPercent = (value) => `${(value * 100).toFixed(2)}%`;
 const formatNumber = (value) => Number.isInteger(value) ? `${value}` : `${value}`;
+const formatPointGap = (value) => `${Math.abs(value).toFixed(2)} pt`;
 
 function setText(id, value) {
   document.getElementById(id).textContent = value;
+}
+
+function byName(name) {
+  return report.modeles.find((modele) => modele.nom === name);
+}
+
+function numericVariables(modele) {
+  return Number.parseFloat(`${modele.variables}`.replace('~', ''));
 }
 
 function renderSummary() {
@@ -460,6 +634,41 @@ function renderSummary() {
 
   const reduction = 1 - report.mss_svm.length / dataset.nb_variables;
   setText('reduction-rate', `${(reduction * 100).toFixed(1)}%`);
+}
+
+function renderInsights() {
+  const dataset = report.dataset;
+  const svm = byName('SVM Classique');
+  const ladSvm = byName('LAD-SVM');
+  const rf = byName('RF Classique');
+  const rfLad = byName('RF-LAD');
+
+  const reductionCount = dataset.nb_variables - numericVariables(ladSvm);
+  const reductionRate = reductionCount / dataset.nb_variables * 100;
+  const svmGap = (ladSvm.accuracy - svm.accuracy) * 100;
+  const rfGap = (rfLad.accuracy - rf.accuracy) * 100;
+
+  const mainLabel = svmGap >= 0
+    ? 'LAD-SVM améliore légèrement le SVM classique'
+    : 'LAD-SVM reste proche du SVM classique';
+
+  const mainDetail = svmGap >= 0
+    ? `Avec ${numericVariables(ladSvm)} variables au lieu de ${dataset.nb_variables}, LAD-SVM gagne ${formatPointGap(svmGap)} d'accuracy sur cette exécution.`
+    : `Avec ${numericVariables(ladSvm)} variables au lieu de ${dataset.nb_variables}, LAD-SVM perd seulement ${formatPointGap(svmGap)} d'accuracy sur cette exécution.`;
+
+  setText('main-insight', mainLabel);
+  setText('main-insight-detail', mainDetail);
+  setText('compactness-gain', `${reductionCount} variables`);
+  setText('rf-gap', rfGap >= 0 ? `+${rfGap.toFixed(2)} pt` : `-${Math.abs(rfGap).toFixed(2)} pt`);
+
+  const rfSentence = rfGap >= 0
+    ? `RF-LAD obtient une accuracy supérieure de ${formatPointGap(rfGap)} à la forêt classique.`
+    : `RF-LAD perd ${formatPointGap(rfGap)} par rapport à la forêt classique, avec des MSS d'environ ${numericVariables(rfLad)} variables.`;
+
+  setText(
+    'conclusion-text',
+    `La sélection MaxSAT réduit l'espace de ${dataset.nb_variables} à ${numericVariables(ladSvm)} variables pour LAD-SVM, soit une réduction de ${reductionRate.toFixed(1)}%. ${mainDetail} ${rfSentence} Le rapport confirme donc l'intérêt du LAD pour produire des modèles plus compacts tout en conservant des performances proches des approches classiques.`
+  );
 }
 
 function renderChart(containerId, items, unit, maxValue) {
@@ -532,6 +741,7 @@ function renderMss() {
 
 function render() {
   renderSummary();
+  renderInsights();
 
   renderChart(
     'accuracy-chart',
