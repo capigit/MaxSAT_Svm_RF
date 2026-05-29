@@ -10,6 +10,7 @@ def generer_rapport_resultats(resultats, dossier_sortie='reports'):
 
     (output_dir / '.nojekyll').write_text('', encoding='utf-8')
     (output_dir / 'index.html').write_text(_html(), encoding='utf-8')
+    (output_dir / 'favicon.svg').write_text(_favicon(), encoding='utf-8')
     (assets_dir / 'style.css').write_text(_css(), encoding='utf-8')
     (assets_dir / 'script.js').write_text(_js(), encoding='utf-8')
     (assets_dir / 'data.js').write_text(_data_js(resultats), encoding='utf-8')
@@ -32,6 +33,7 @@ def _html():
   <meta name="description" content="Rapport LAD-ML : comparaison SVM, LAD-SVM, forêt aléatoire et RF-LAD avec sélection de variables par MaxSAT.">
   <meta name="theme-color" content="#315f9f">
   <title>Rapport LAD-ML</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
@@ -127,6 +129,19 @@ def _html():
   <script src="assets/script.js"></script>
 </body>
 </html>
+"""
+
+
+def _favicon():
+    return """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" rx="14" fill="#315f9f"/>
+  <path d="M18 41h28" stroke="#ffffff" stroke-width="5" stroke-linecap="round"/>
+  <path d="M20 35l8-14 8 14 8-20" fill="none" stroke="#8ee0a3" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="20" cy="35" r="4" fill="#ffffff"/>
+  <circle cx="28" cy="21" r="4" fill="#ffffff"/>
+  <circle cx="36" cy="35" r="4" fill="#ffffff"/>
+  <circle cx="44" cy="15" r="4" fill="#ffffff"/>
+</svg>
 """
 
 
