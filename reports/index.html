@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Rapport LAD-ML : comparaison SVM, LAD-SVM, forêt aléatoire et RF-LAD avec sélection de variables par MaxSAT.">
+  <meta name="theme-color" content="#315f9f">
+  <title>Rapport LAD-ML</title>
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  <main class="page-shell">
+    <header class="report-header">
+      <div>
+        <p class="eyebrow">Projet LAD-ML</p>
+        <h1>Sélection de variables par MaxSAT</h1>
+      </div>
+      <div class="header-meta">
+        <span id="dataset-name">Dataset</span>
+        <strong id="generated-at">Rapport</strong>
+      </div>
+    </header>
+
+    <section class="summary-grid" aria-label="Synthèse">
+      <article class="metric-card">
+        <span>Exemples</span>
+        <strong id="sample-count">0</strong>
+      </article>
+      <article class="metric-card">
+        <span>Variables initiales</span>
+        <strong id="feature-count">0</strong>
+      </article>
+      <article class="metric-card">
+        <span>Variables LAD-SVM</span>
+        <strong id="lad-feature-count">0</strong>
+      </article>
+      <article class="metric-card">
+        <span>Réduction LAD</span>
+        <strong id="reduction-rate">0%</strong>
+      </article>
+    </section>
+
+    <section class="content-grid">
+      <section class="panel chart-panel">
+        <div class="panel-heading">
+          <h2>Accuracy par modèle</h2>
+          <span>Comparaison classique vs LAD</span>
+        </div>
+        <div class="chart" id="accuracy-chart" aria-label="Graphique des accuracies"></div>
+      </section>
+
+      <section class="panel chart-panel">
+        <div class="panel-heading">
+          <h2>Variables utilisées</h2>
+          <span>Impact de la sélection MaxSAT</span>
+        </div>
+        <div class="chart" id="feature-chart" aria-label="Graphique des variables"></div>
+      </section>
+    </section>
+
+    <section class="panel">
+      <div class="panel-heading">
+        <h2>Tableau des résultats</h2>
+        <span>Mesures obtenues sur le jeu de test</span>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Modèle</th>
+              <th>Famille</th>
+              <th>Accuracy</th>
+              <th>Variables</th>
+            </tr>
+          </thead>
+          <tbody id="results-table"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="content-grid">
+      <section class="panel">
+        <div class="panel-heading">
+          <h2>MSS LAD-SVM</h2>
+          <span>Indices des variables conservées</span>
+        </div>
+        <div class="chips" id="svm-mss"></div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-heading">
+          <h2>MSS RF-LAD</h2>
+          <span>Ensembles énumérés par clauses bloquantes</span>
+        </div>
+        <div class="mss-list" id="rf-mss-list"></div>
+      </section>
+    </section>
+  </main>
+
+  <script src="assets/data.js"></script>
+  <script src="assets/script.js"></script>
+</body>
+</html>
