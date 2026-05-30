@@ -1,5 +1,5 @@
 window.LAD_REPORT_DATA = {
-  "date_generation": "30/05/2026 01:20",
+  "date_generation": "30/05/2026 02:08",
   "dataset": {
     "nom": "Breast Cancer Wisconsin binarisé",
     "nb_exemples": 569,

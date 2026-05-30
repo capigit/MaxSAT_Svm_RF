@@ -12,34 +12,15 @@
 <body>
   <main class="page-shell">
     <header class="report-header">
-      <div class="header-copy">
+      <div>
         <p class="eyebrow">Projet LAD-ML</p>
         <h1>Sélection de variables par MaxSAT</h1>
-        <p class="lead">Analyse expérimentale de la réduction de variables par logique MaxSAT, appliquée à des classificateurs SVM et forêts aléatoires.</p>
       </div>
       <div class="header-meta">
         <span id="dataset-name">Dataset</span>
         <strong id="generated-at">Rapport</strong>
       </div>
     </header>
-
-    <section class="method-strip" aria-label="Méthode">
-      <article>
-        <span>1</span>
-        <strong>Binarisation</strong>
-        <p>Le jeu Breast Cancer est transformé en variables binaires par seuillage.</p>
-      </article>
-      <article>
-        <span>2</span>
-        <strong>MaxSAT</strong>
-        <p>Les MSS minimisent les variables tout en séparant les classes.</p>
-      </article>
-      <article>
-        <span>3</span>
-        <strong>Évaluation</strong>
-        <p>Les modèles classiques sont comparés aux variantes LAD.</p>
-      </article>
-    </section>
 
     <section class="summary-grid" aria-label="Synthèse">
       <article class="metric-card">
@@ -57,24 +38,6 @@
       <article class="metric-card">
         <span>Réduction LAD</span>
         <strong id="reduction-rate">0%</strong>
-      </article>
-    </section>
-
-    <section class="insight-grid" aria-label="Conclusions principales">
-      <article class="insight-card primary">
-        <span>Observation principale</span>
-        <strong id="main-insight">Analyse en cours</strong>
-        <p id="main-insight-detail"></p>
-      </article>
-      <article class="insight-card">
-        <span>Gain de compacité</span>
-        <strong id="compactness-gain">0 variable</strong>
-        <p>Variables retirées par le MSS LAD-SVM par rapport au modèle complet.</p>
-      </article>
-      <article class="insight-card">
-        <span>Écart RF-LAD</span>
-        <strong id="rf-gap">0 point</strong>
-        <p>Différence d'accuracy entre forêt aléatoire classique et RF-LAD.</p>
       </article>
     </section>
 
@@ -96,7 +59,7 @@
       </section>
     </section>
 
-    <section class="panel results-panel">
+    <section class="panel">
       <div class="panel-heading">
         <h2>Tableau des résultats</h2>
         <span>Mesures obtenues sur le jeu de test</span>
@@ -132,14 +95,6 @@
         </div>
         <div class="mss-list" id="rf-mss-list"></div>
       </section>
-    </section>
-
-    <section class="panel conclusion-panel">
-      <div class="panel-heading">
-        <h2>Conclusion expérimentale</h2>
-        <span>Synthèse automatique</span>
-      </div>
-      <p id="conclusion-text"></p>
     </section>
   </main>
 
